@@ -1,0 +1,36 @@
+.project-card{
+  height:10rem;
+  width:23rem;
+  border-radius:15px;
+}
+
+.project-table{
+  box-shadow: none;
+  border: none;
+}
+
+.project-table td{
+  border: none;
+}
+
+.project-table th{
+  border: none;
+}
+
+.project-table tr{
+  border: none;
+}
+
+.collapse.in .collapse{
+  height: 200px;
+  overflow-y: scroll;
+  max-height:200px;
+}
+
+.accordion-heading{
+  margin-left: 45%;
+}
+
+.accordion{
+  box-shadow: 5px 2px 10px #555;
+}

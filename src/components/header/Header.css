@@ -1,0 +1,19 @@
+.nav a{
+  text-decoration: none;
+  color: #fff;
+}
+
+.nav a:hover{
+  font-weight: 600;
+  color: #6C63FF;
+}
+
+.header-list a.active{
+  color: #6C63FF; 
+  font-weight: 700;
+  border-bottom: 4px solid #6C63FF;
+}
+
+img{
+  border-radius: 50%;
+}

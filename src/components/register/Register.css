@@ -1,0 +1,31 @@
+form{
+  border-radius: 15px;
+  box-shadow: 4px 8px 15px #555;
+  width: 70%;
+  margin: auto;
+}
+
+form button{
+  margin-top: 50px;
+}
+
+/* .nav-button{
+  background-color: #6C63FF;
+} */
+
+.register-text{
+  color: #6C63FF;
+}
+
+.register-submit{
+  background-color: #6C63FF;
+}
+
+.register-submit:hover{
+  font-size: 17px;
+  background-color: #6C63FF;
+}
+
+.register-submit:active{
+  background-color: #6C63FF;
+}
