@@ -2,11 +2,14 @@ import React, {useState} from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios' 
 import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 const AssignRole = () => {
 
   let {register,handleSubmit,formState:{errors}}=useForm()
+
+  let navigate=useNavigate()
 
   //state for error
   let [error,setError]=useState("")
@@ -17,14 +20,13 @@ const AssignRole = () => {
   //get token from session storage
   let token=sessionStorage.getItem("token")
 
-  //get email
-  let email=useLocation()
-  console.log("email from state",email.state)
-
+  //get email and role
+  let {state}=useLocation()
+  let {email,role}=state
 
   //on submission of form
   const onSubmit=async(userObj)=>{
-    userObj.email=email.state
+    userObj.email=email
     console.log("userObj",userObj)
     try{
       //make request
@@ -43,6 +45,11 @@ const AssignRole = () => {
     }
   }
 
+  //navigate to get users on clicking back button
+  const getUsers=()=>{
+    navigate("/super-admin-dashboard/get-users")
+  }
+
   return (
     <div className='container mt-5'>
     <p className='text-secondary display-6 text-center fw-bold'>Assign Role</p>
@@ -55,13 +62,14 @@ const AssignRole = () => {
      {/* email */}
     <div className='mb-4'>
     <label htmlFor="email" className="form-label fw-bold text-left">Email</label>
-    <input type="email" {...register('email')} className="form-control" value={email.state} disabled></input>
+    <input type="email" {...register('email')} className="form-control" value={email} disabled></input>
     </div>
 
     {/* role */}
     <label for="role" className='form-label fw-bold text-left'>Choose a role:</label>
-    <select name="role" id="role" className='form-control' {...register('role',{required:"*role required"})} defaultValue="--roles--">
-    <option disabled>--roles--</option>
+    <select name="role" id="role" className='form-control' {...register('role',{required:"*role required"})} 
+    defaultValue={role ? role : "--role"}>
+    <option disabled value="--role">--roles--</option>
     <option value="Admin">Admin</option>
     <option value="GDO head">GDO head</option>
     <option value="project manager">project manager</option>
@@ -72,8 +80,10 @@ const AssignRole = () => {
 
      {/* submit button */}
      <div>
-        <button type="submit" className="btn btn-success d-block mx-auto">Assign</button>
-      </div>
+      <button type="submit" className="btn btn-success d-inline me-5">Assign</button>
+      {/* back button */}
+      <button type='button' className='btn btn-warning d-inline ' onClick={getUsers}>Back</button>
+     </div>
     </form>
     </div>
   )

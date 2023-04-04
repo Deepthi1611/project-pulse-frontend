@@ -90,8 +90,15 @@ const UpdateTeamMember = ({showUpdate, setShowUpdate, member}) => {
 
         {/* role */}
         <div className="mb-4">
-          <label htmlFor="role" className="form-label fw-bold">Role</label>
-          <input type="text" {...register('role', {required:"*role required"})} className="form-control"></input>
+        <label htmlFor="role" className="form-label fw-bold">Role</label>
+          <select {...register('role', {required:"*Role required"})} className='form-control' defaultValue="--select role--">
+            <option disabled>--select role--</option>
+            <option value="Dev">Dev</option>
+            <option value="QA">QA</option>
+            <option value="Product">Product</option>
+            <option value="Management">Management</option>
+            <option value="Devops">Devops</option>
+          </select>
           {/* validation error msg */}
           {errors.role && <p className="text-danger"><strong>{errors.role?.message}</strong></p>}
         </div>
@@ -106,32 +113,48 @@ const UpdateTeamMember = ({showUpdate, setShowUpdate, member}) => {
 
         {/* status */}
         <div className="mb-4">
-          <label htmlFor="status" className="form-label fw-bold">status</label>
-          <input type="text" {...register('status', {required:"*status required"})} className="form-control"></input>
+        <label htmlFor="status" className="form-label fw-bold">status</label>
+          <select {...register('status', {required:"*status required"})} className='form-control' defaultValue="--status--">
+            <option value="--status--" disabled>--status--</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
           {/* validation error msg */}
           {errors.status && <p className="text-danger"><strong>{errors.status?.overallProjectFitnessIndicator}</strong></p>}
         </div>
 
         {/* billing status */}
         <div className="mb-4">
-          <label htmlFor="billingStatus" className="form-label fw-bold">billing status</label>
-          <input type="text" {...register('billingStatus', {required:"*billing status required"})} className="form-control"></input>
+        <label htmlFor="billingStatus" className="form-label fw-bold">billing status</label>
+          <select {...register('billingStatus', {required:"*billing status required"})} className='form-control' defaultValue="--billing status--">
+            <option disabled>--billing status--</option>
+            <option value="billed">billed</option>
+            <option value="buffer">buffer</option>
+          </select>
           {/* validation error msg */}
           {errors.billingStatus && <p className="text-danger"><strong>{errors.billingStatus?.message}</strong></p>}
         </div>
 
         {/* exposed to customer */}
         <div className="mb-4">
-          <label htmlFor="exposedToCustomer" className="form-label fw-bold">Exposed To Customer</label>
-          <input type="text" {...register('exposedToCustomer', {required:"*exposed to customer required"})} className="form-control"></input>
+        <label htmlFor="exposedToCustomer" className="form-label fw-bold">Exposed To Customer</label>
+          <select {...register('exposedToCustomer', {required:"*exposed to customer required"})} className='form-control' defaultValue="--exposed to customer--">
+            <option disabled>--exposed to customer--</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
           {/* validation error msg */}
           {errors.exposedToCustomer && <p className="text-danger"><strong>{errors.exposedToCustomer?.message}</strong></p>}
         </div>
 
         {/* allocation type */}
         <div className="mb-4">
-          <label htmlFor="allocationType" className="form-label fw-bold">Allocation Type</label>
-          <input type="text" {...register('allocationType', {required:"*allocation type required"})} className="form-control"></input>
+        <label htmlFor="allocationType" className="form-label fw-bold">Allocation Type</label>
+          <select {...register('allocationType', {required:"*allocation type required"})} className='form-control' defaultValue="--allocation type--">
+            <option disabled>--allocation type--</option>
+            <option value="permanent">permanent</option>
+            <option value="temporary">temporary</option>
+          </select>
           {/* validation error msg */}
           {errors.allocationType && <p className="text-danger"><strong>{errors.allocationType?.message}</strong></p>}
         </div>

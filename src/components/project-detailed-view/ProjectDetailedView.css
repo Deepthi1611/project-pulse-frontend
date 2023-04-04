@@ -5,11 +5,14 @@
 }
 
 .project-table{
-  box-shadow: none;
-  border: none;
+  box-shadow: 5px 5px 10px #555;
 }
 
-.project-table td{
+.project-table thead{
+  background-color: rgb(0, 128, 0,0.7);
+}
+
+/* .project-table td{
   border: none;
 }
 
@@ -19,7 +22,7 @@
 
 .project-table tr{
   border: none;
-}
+} */
 
 .collapse.in .collapse{
   height: 200px;

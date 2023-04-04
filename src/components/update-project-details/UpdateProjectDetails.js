@@ -97,11 +97,20 @@ const UpdateProjectDetails = ({showUpdate,setShowUpdate,project}) => {
 
     {/* status of project */}
     <div className="mb-4">
-      <label htmlFor="statusOfProject" className="form-label fw-bold">Status of project</label>
-      <input type="text" {...register('statusOfProject', {required:"*status of project required"})} className="form-control"></input>
-      {/* validation error msg */}
-      {errors.statusOfProject && <p className="text-danger"><strong>{errors.statusOfProject?.message}</strong></p>}
-    </div>
+    <label htmlFor="statusOfProject" className="form-label fw-bold">Status of project</label>
+          <select {...register('statusOfProject', {required:"* status of project required"})} className='form-control'>
+            <option disabled>--status of project--</option>
+            <option value="sales">sales</option>
+            <option value="pre-sales">pre-sales</option>
+            <option value="client sign off">client sign off</option>
+            <option value="In progress">In progress</option>
+            <option value="completed">completed</option>
+            <option value="paused">paused</option>
+            <option value="deferred">deferred</option>
+          </select>
+          {/* validation error msg */}
+          {errors.statusOfProject && <p className="text-danger"><strong>{errors.statusOfProject?.message}</strong></p>}
+      </div>
 
     {/* start date */}
     <div className="mb-4">
@@ -113,11 +122,16 @@ const UpdateProjectDetails = ({showUpdate,setShowUpdate,project}) => {
 
     {/* overall project fitness indicator */}
     <div className="mb-4">
-      <label htmlFor="overallProjectFitnessIndicator" className="form-label fw-bold">overall project fitness indicator</label>
-      <input type="text" {...register('overallProjectFitnessIndicator', {required:"*project fitness indicator required"})} className="form-control"></input>
-      {/* validation error msg */}
-      {errors.overallProjectFitnessIndicator && <p className="text-danger"><strong>{errors.client?.overallProjectFitnessIndicator}</strong></p>}
-    </div>
+    <label htmlFor="overallProjectFitnessIndicator" className="form-label fw-bold">overall project fitness indicator</label>
+          <select {...register('overallProjectFitnessIndicator', {required:"* overall project fitness indicator required"})} className='form-control'>
+            <option disabled value="--overall project fitness indicator--">--overall project fitness indicator--</option>
+            <option value="red">red</option>
+            <option value="amber">amber</option>
+            <option value="green">green</option>
+          </select>
+          {/* validation error msg */}
+          {errors.overallProjectFitnessIndicator && <p className="text-danger"><strong>{errors.client?.overallProjectFitnessIndicator}</strong></p>}
+      </div>
 
     {/* gdo head email */}
     <div className="mb-4">

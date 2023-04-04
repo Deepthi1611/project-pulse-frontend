@@ -1,9 +1,13 @@
 import React,{useState} from 'react'
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const RaiseProjectConcern = () => {
   let {register,handleSubmit,formState:{errors},reset}=useForm()
+
+  //get state from store
+  let {userObj}=useSelector(state=>state.login)
 
   //get token from storage
   let token=sessionStorage.getItem("token")
@@ -20,6 +24,14 @@ const RaiseProjectConcern = () => {
   //on submission of form
   const onSubmit=async(concernObj)=>{
     reset()
+    //add raised by to concern object
+    concernObj.raisedBy=userObj.email
+    //add raised on date
+    concernObj.raisedOnDate=new Date()
+
+    if(concernObj.mitigatedOn===""){
+      delete concernObj["mitigatedOn"]
+    }
     try{
       //make http request
     let res=await axios.post("http://localhost:4000/project-manager-api/raise-project-concern",concernObj,{
@@ -66,26 +78,15 @@ const RaiseProjectConcern = () => {
           {errors.concernDescription && <p className="text-danger"><strong>{errors.concernDescription?.message}</strong></p>}
         </div>
 
-        {/* raised by */}
-        <div className="mb-4">
-          <label htmlFor="raisedBy" className="form-label fw-bold">Raised By</label>
-          <input type="text" {...register('raisedBy', {required:"*raised by required"})} className="form-control"></input>
-          {/* validation error msg */}
-          {errors.raisedBy && <p className="text-danger"><strong>{errors.raisedBy?.message}</strong></p>}
-        </div>
-
-        {/* raised on date */}
-        <div className="mb-4">
-          <label htmlFor="raisedOnDate" className="form-label fw-bold">Raised On Date</label>
-          <input type="date" {...register('raisedOnDate', {required:"*raised on date required"})} className="form-control"></input>
-          {/* validation error msg */}
-          {errors.raisedOndate && <p className="text-danger"><strong>{errors.raisedOndate?.message}</strong></p>}
-        </div>
-
         {/* severity */}
         <div className="mb-4">
           <label htmlFor="severity" className="form-label fw-bold">Severity</label>
-          <input type="text" {...register('severity', {required:"*severity required"})} className="form-control"></input>
+          <select {...register('severity', {required:"*severity required"})} className="form-control" defaultValue="--severity--">
+            <option value="--severity--" disabled>--severity--</option>
+            <option value="high">high</option>
+            <option value="medium">medium</option>
+            <option value="low">low</option>
+          </select>
           {/* validation error msg */}
           {errors.severity && <p className="text-danger"><strong>{errors.severity?.message}</strong></p>}
         </div>
@@ -93,7 +94,11 @@ const RaiseProjectConcern = () => {
         {/* concern raised internally or not */}
         <div className="mb-4">
           <label htmlFor="concernRaisedInternallyOrNot" className="form-label fw-bold">Concern Raised internally or not</label>
-          <input type="text" {...register('concernRaisedInternallyOrNot', {required:"*concernRaisedInternallyOrNot required"})} className="form-control"></input>
+          <select {...register('concernRaisedInternallyOrNot', {required:"*concernRaisedInternallyOrNot required"})} className="form-control" defaultValue="--concern raised internally--">
+            <option disabled value="--concern raised internally--">--concern raised internally--</option>
+            <option value={true}>Yes</option>
+            <option value={false}>No</option>
+          </select>
           {/* validation error msg */}
           {errors.concernRaisedInternallyOrNot && <p className="text-danger"><strong>{errors.concernRaisedInternallyOrNot?.overallProjectFitnessIndicator}</strong></p>}
         </div>
@@ -101,7 +106,12 @@ const RaiseProjectConcern = () => {
         {/* status */}
         <div className="mb-4">
           <label htmlFor="status" className="form-label fw-bold">Status</label>
-          <input type="text" {...register('status', {required:"*status required"})} className="form-control"></input>
+          <select {...register('status', {required:"*status required"})} className="form-control" defaultValue="raised">
+            <option disabled value="--status--">--status--</option>
+            <option value="raised">raised</option>
+            <option value="remediation suggested">remediation suggested</option>
+            <option value="mitigated">mitigated</option>
+          </select>
           {/* validation error msg */}
           {errors.status && <p className="text-danger"><strong>{errors.status?.message}</strong></p>}
         </div>
