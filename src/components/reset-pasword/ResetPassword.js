@@ -6,7 +6,7 @@ const ResetPassword = () => {
     let navigate=useNavigate();
     let {state}=useLocation();
     //console.log("state in reset password",state)
-    let {register,handleSubmit,reset}=useForm()
+    let {register,handleSubmit,reset,formState:{errors}}=useForm()
      //state for error
     let [error,setError]=useState()
     //state for response error
@@ -42,11 +42,15 @@ const ResetPassword = () => {
       {/* otp */}
      <div className='mb-4  fw-semibold'>
           <label htmlFor='otp' className='form-label'> OTP </label>
-          <input type="number" {...register("otp")} name="otp" id="otp" className='form-control' placeholder="Enter OTP"></input>
+          <input type="number" {...register("otp", {required:"* otp required"})} name="otp" id="otp" className='form-control' placeholder="Enter OTP"></input>
+          {/* validation error msg */}
+          {errors.otp && <p className="text-danger"><strong>{errors.otp?.message}</strong></p>}
      </div>
      <div className='mb-4  fw-semibold'>
           <label htmlFor='password' className='form-label'> New password </label>
-          <input type="password" {...register("password")} name="password" id="password" className='form-control' placeholder="Enter Password"></input>
+          <input type="password" {...register("password", {required:"* password required"})} name="password" id="password" className='form-control' placeholder="Enter Password"></input>
+          {/* validation error msg */}
+          {errors.password && <p className="text-danger"><strong>{errors.password?.message}</strong></p>}
      </div>
      <div className='text-center'>
         <button type="submit" className='btn btn-success rounded'>Reset Password</button>

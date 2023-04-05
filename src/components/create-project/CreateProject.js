@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import "./CreateProject.css"
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
@@ -19,12 +19,34 @@ const CreateProject = () => {
   //state for response
   let [response, setResponse]=useState("")
 
-  console.log(response)
+  //state for gdo heads
+  let [gdos,setGdos]=useState([])
+
+  //state for project managers
+  let [managers,setManagers]=useState([])
+
+  // console.log(response)
+
+  //get all gdos and project managers
+  const getUsers=async()=>{
+    let res=await axios.get("http://localhost:4000/user-api/managers")
+    // console.log(res)
+    setGdos(res.data.payload.gdos)
+    setManagers(res.data.payload.projectManagers)
+  }
+
+  //useEffect
+  useEffect(()=>{
+    getUsers()
+  },[])
 
   //on submission of form
   const onSubmit=async(projectObj)=>{
     reset()
     // console.log(projectObj)
+    if(projectObj.endDate===""){
+      delete projectObj["endDate"]
+    }
     try{
       //make request
     let res=await axios.post("http://localhost:4000/admin-api/project",projectObj,{
@@ -81,7 +103,16 @@ const CreateProject = () => {
         {/* status of project */}
         <div className="mb-4">
           <label htmlFor="statusOfProject" className="form-label fw-bold">Status of project</label>
-          <input type="text" {...register('statusOfProject', {required:"*status of project required"})} className="form-control"></input>
+          <select {...register('statusOfProject', {required:"* status of project required"})} defaultValue="--status of project--" className='form-control'>
+            <option disabled>--status of project--</option>
+            <option value="sales">sales</option>
+            <option value="pre-sales">pre-sales</option>
+            <option value="client sign off">client sign off</option>
+            <option value="In progress">In progress</option>
+            <option value="completed">completed</option>
+            <option value="paused">paused</option>
+            <option value="deferred">deferred</option>
+          </select>
           {/* validation error msg */}
           {errors.statusOfProject && <p className="text-danger"><strong>{errors.statusOfProject?.message}</strong></p>}
         </div>
@@ -94,10 +125,21 @@ const CreateProject = () => {
           {errors.startDate && <p className="text-danger"><strong>{errors.startDate?.message}</strong></p>}
         </div>
 
+        {/* end date - optional */}
+        <div className='mb-4'>
+          <label htmlFor='endDate' className='from-label fw-bold'>End date</label>
+          <input type='date' {...register('endDate')} className='form-control'></input>
+        </div>
+
         {/* overall project fitness indicator */}
         <div className="mb-4">
           <label htmlFor="overallProjectFitnessIndicator" className="form-label fw-bold">overall project fitness indicator</label>
-          <input type="text" {...register('overallProjectFitnessIndicator', {required:"*project fitness indicator required"})} className="form-control"></input>
+          <select {...register('overallProjectFitnessIndicator', {required:"* overall project fitness indicator required"})} defaultValue="--overall project fitness indicator--" className='form-control'>
+            <option disabled value="--overall project fitness indicator--">--overall project fitness indicator--</option>
+            <option value="red">red</option>
+            <option value="amber">amber</option>
+            <option value="green">green</option>
+          </select>
           {/* validation error msg */}
           {errors.overallProjectFitnessIndicator && <p className="text-danger"><strong>{errors.client?.overallProjectFitnessIndicator}</strong></p>}
         </div>
@@ -113,31 +155,43 @@ const CreateProject = () => {
         {/* type of project */}
         <div className="mb-4">
           <label htmlFor="typeOfProject" className="form-label fw-bold">Type of project</label>
-          <input type="text" {...register('typeOfProject', {required:"*type of project required"})} className="form-control"></input>
+          <select {...register('typeOfProject', {required:"* type of project required"})} defaultValue="--type of project--" className='form-control'>
+            <option disabled value="--type of project--">--type of project--</option>
+            <option value="Development">Development</option>
+            <option value="Devops">Devops</option>
+            <option value="Test Automation">Test Automation</option>
+            <option value="Performance Testing">Performance Testing</option>
+            <option value="Security">Security</option>
+            <option value="Sustenance Engineering">Sustenance Engineering</option>
+            <option value="Mobility">Mobility</option>
+            <option value="Storage">Storage</option>
+          </select>
           {/* validation error msg */}
           {errors.typeOfPoject && <p className="text-danger"><strong>{errors.typeOfPoject?.message}</strong></p>}
         </div>
 
-        {/* team size */}
-        <div className="mb-4">
-          <label htmlFor="teamSize" className="form-label fw-bold">Team Size</label>
-          <input type="number" {...register('teamSize', {required:"*team size required"})} className="form-control"></input>
-          {/* validation error msg */}
-          {errors.teamSize && <p className="text-danger"><strong>{errors.teamSize?.message}</strong></p>}
-        </div>
-
         {/* gdo head email */}
         <div className="mb-4">
-          <label htmlFor="gdoHeadEmail" className="form-label fw-bold">GDO Head Email</label>
-          <input type="text" {...register('gdoHeadEmail', {required:"*GDO head email required"})} className="form-control"></input>
+          <label htmlFor="gdoHeadEmail" className="form-label fw-bold">GDO Head</label>
+          <select {...register('gdoHeadEmail', {required:"*GDO head email required"})} className="form-control" defaultValue="--gdo head--">
+            <option value="--gdo head--" disabled>--GDO Head--</option>
+            {
+              gdos.map((gdo,index)=><option key={index} value={gdo.email}>{gdo.username}</option>)
+            }
+          </select>
           {/* validation error msg */}
           {errors.gdoHeadEmail && <p className="text-danger"><strong>{errors.gdoHeadEmail?.message}</strong></p>}
         </div>
 
         {/* project manager email */}
         <div className="mb-4">
-          <label htmlFor="projectManagerEmail" className="form-label fw-bold">Project Manager Email</label>
-          <input type="text" {...register('projectManagerEmail', {required:"*project manager email required"})} className="form-control"></input>
+          <label htmlFor="projectManagerEmail" className="form-label fw-bold">Project Manager</label>
+          <select {...register('projectManagerEmail', {required:"*project manager email required"})} className="form-control" defaultValue="--project manager--">
+            <option value="--project manager--" disabled>--project manager--</option>
+            {
+              managers.map((manager,index)=><option value={manager.email}>{manager.username}</option>)
+            }
+          </select>
           {/* validation error msg */}
           {errors.projectManagerEmail && <p className="text-danger"><strong>{errors.projectManagerEmail?.message}</strong></p>}
         </div>

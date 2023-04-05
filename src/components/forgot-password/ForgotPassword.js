@@ -6,7 +6,7 @@ import forgetImage from "../../images/forget.svg"
 
 
 const ForgotPassword = () => {
-  let {handleSubmit,register}=useForm()
+  let {handleSubmit,register, formState:{errors}}=useForm()
   let navigate=useNavigate()
   //state for error
   let [error,setError]=useState()
@@ -51,7 +51,9 @@ const ForgotPassword = () => {
       {/* email */}
      <div className='mb-4  fw-semibold'>
         <label htmlFor='email' className='form-label'> Email </label>
-        <input type="email" {...register("email")}name="email" id="email" className='form-control' placeholder="Enter Email"></input>
+        <input type="email" {...register("email", {required:"* email required"})}name="email" id="email" className='form-control' placeholder="Enter Email"></input>
+        {/* validation error msg */}
+        {errors.email && <p className="text-danger"><strong>{errors.email?.message}</strong></p>}
      </div>
      {/* otp */}
      <div className='text-center '>

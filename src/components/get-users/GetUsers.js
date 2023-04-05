@@ -9,6 +9,8 @@ const GetUsers = () => {
   let [users,setUsers]=useState([])
   //state for errors
   let [error,setError]=useState("")
+  //state for loading
+  let [loading,setLoading]=useState(false)
 
   //get token from session storage
   let token=sessionStorage.getItem("token")
@@ -23,6 +25,7 @@ const GetUsers = () => {
       headers:{Authorization: `Bearer ${token}`}
     });
    setUsers(res.data.payload)
+   setLoading(true)
     }catch(err){
       console.log(err)
       setError(err.response.data.message)
@@ -34,15 +37,24 @@ const GetUsers = () => {
   },[])
 
   //navigate to assign role
-  const editUser=(email)=>{
-    navigate("assign-role", {state:email})
+  const editUser=(email,role)=>{
+    // navigate("/super-admin-dashboard/assign-role", {state:email})
+    console.log(role)
+    if(role===null){
+      navigate("/super-admin-dashboard/assign-role", {state:{email:email}})
+    }
+    else{
+      navigate("/super-admin-dashboard/assign-role",{state:{email:email,role:role}})
+    }
   }
 
   return (
     <div className='container-fluid mt-5 text-center ms-5'>
       <p className='text-secondary display-6 text-center fw-bold'>Users data</p>
       <hr></hr>
-      {error && <p className='text-center fw-bold text-danger'>{error}</p>}
+      {error ? <p className='text-center fw-bold text-danger'>{error}</p>:
+      loading===false ? <div class="spinner-border text-center" role="status"></div> :
+      users.length === 0 ? <p className="text-danger fw-bold fs-3 text-center">No projects to display</p> :
       <table className='text-center mx-auto table table-striped table-hover table-bordered '>
         <thead>
           <tr className='bg-success'>
@@ -58,11 +70,17 @@ const GetUsers = () => {
               <td>{user.email}</td>
               <td>{user.username}</td>
               <td>{user.role}</td>
-              <td><button className='btn btn-success' onClick={()=>editUser(user.email)}>Assign role</button></td>
+              <td>
+                {
+                  user.role ? <button className='btn btn-success' onClick={()=>editUser(user.email,user.role)}>Change role</button>:
+                  <button className='btn btn-success' onClick={()=>editUser(user.email,user.role)}>Assign role</button>
+                }
+              </td>
             </tr>)
           }
         </tbody>
       </table>
+    }
       </div>
   )
 }

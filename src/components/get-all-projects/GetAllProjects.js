@@ -22,6 +22,9 @@ const GetAllProjects = () => {
   //state for response
   let [response, setResponse] = useState("");
 
+  //state for getting response
+  let [loading,setLoading]=useState(false)
+
   //get token from session storage
   let token = sessionStorage.getItem("token");
 
@@ -62,6 +65,7 @@ const GetAllProjects = () => {
       console.log(res);
       setProjects(res.data.payload);
       setError("");
+      setLoading(true)
     } catch (err) {
       console.log(err);
       setError(err.response.data.message);
@@ -120,10 +124,14 @@ const GetAllProjects = () => {
           <p className="text-center text-success fw-bold fs-3">{response}</p>
         )
       )}
+      {
+        loading===false ? <div class="spinner-border text-center" role="status"></div> :
+        projects.length === 0 ? <p className="text-danger fw-bold fs-3 text-center">No projects to display</p> :
+      
       <div className="container-fluid">
       <Table responsive striped bordered hover className="text-center" style={{boxShadow:"4px 4px 7px #555"}}>
-        <thead>
-          <tr className="bg-success">
+        <thead className="bg-success">
+          <tr>
             <th>Name</th>
             <th>Client</th>
             <th>client account manager</th>
@@ -132,6 +140,7 @@ const GetAllProjects = () => {
             <th>Fitness Indicator</th>
             <th>GDO head</th>
             <th>Project manager</th>
+            <th>View</th>
             {
               userObj.role==="Admin" && <div><th></th> <th></th></div>
             }
@@ -172,6 +181,9 @@ const GetAllProjects = () => {
                 {" "}
                 {project.projectManagerEmail}{" "}
               </td>
+              <td onClick={() => projectDetailedView(project.projectId)}>
+                <button className="btn btn-outline-primary">view</button>
+              </td>
               {userObj.role === "Admin" && (
                 <div className="ps-4">
                   <td>
@@ -193,7 +205,9 @@ const GetAllProjects = () => {
           ))}
         </tbody>
       </Table>
+      
       </div>
+    }
       {
         // conditional rendering for update modal
         showUpdate && (

@@ -20,6 +20,9 @@ const ProjectDetailedView = () => {
   //state for update
   let [showUpdate, setShowUpdate] = useState(false);
 
+  //state for loading
+  let [loading,setLoading]=useState(false)
+
   //state for current team member
   let [member, setMember] = useState({});
 
@@ -71,6 +74,7 @@ const ProjectDetailedView = () => {
       setTeam(res.data.payload.projectRecord.team_compositions);
       setProjectRecord(res.data.payload.projectRecord);
       setUpdates(res.data.payload.project_updates);
+      setLoading(true)
     } catch (err) {
       console.log(err);
       setError(err.response.data.message);
@@ -111,9 +115,10 @@ const ProjectDetailedView = () => {
   return (
     <div>
       {/* error */}
-      {error ? (
-        <p className="text-center fw-bold text-danger fs-3">{error}</p>
-      ) : (
+      {error ? <p className="text-center fw-bold text-danger fs-3">{error}</p> :
+      loading===false ? <div class="spinner-border mx-auto" role="status"></div> :
+      fitness === "" ? <p className="text-danger fw-bold fs-3 text-center">No Data to display</p> : 
+      <div>
         <div className="row container mx-auto g-3 mb-3">
           <div className="col-4">
             <div className="card text-center shadow p-3 mx-auto bg-light project-card">
@@ -165,8 +170,7 @@ const ProjectDetailedView = () => {
             </div>
           </div>
         </div>
-      )}
-      <p className="display-6 text-center fw-bold register-text mt-5">
+      <p className="display-6 text-center fw-bold  mt-5">
         Project Details
       </p>
       <hr></hr>
@@ -207,11 +211,11 @@ const ProjectDetailedView = () => {
         </p>
       ) : (
         <div>
-          <p className="display-6 text-center fw-bold register-text mt-5">
+          <p className="display-6 text-center fw-bold mt-5">
             Project updates
           </p>
           <hr></hr>
-          <table
+          <Table responsive bordered hover
             className="text-center mx-auto table table-hover table-bordered project-table"
             style={{ width: "80%" }}
           >
@@ -238,18 +242,26 @@ const ProjectDetailedView = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
         </div>
       )}
-      <p className="display-6 text-center fw-bold register-text mt-5">
-        Team Composition
-      </p>
-      <hr></hr>
+      {
+        team.length===0 ? (
+          <p className="text-center fw-bold text-danger fs-4 mt-4">
+            No Team members to display
+          </p>
+        ) : (
+          <div>
+          <p className="display-6 text-center fw-bold mt-5">
+          Team Composition
+        </p>
+        <hr></hr>
       <Table responsive bordered hover
         className="text-center mx-auto table project-table"
         style={{ width: "80%" }}
       >
         <thead>
+          <tr>
           <th>Employee name</th>
           <th>Role</th>
           <th>Start date</th>
@@ -257,6 +269,7 @@ const ProjectDetailedView = () => {
           <th>Billing status</th>
           <th>Exposed to customer or not</th>
           <th>Allocation type</th>
+          </tr>
           {
             userObj.role==="GDO head" && <div><th><th></th></th></div>
           }
@@ -283,7 +296,7 @@ const ProjectDetailedView = () => {
                   </td>
                   <td>
                     <button
-                      className="btn btn-outline-warning me-3"
+                      className="btn btn-outline-danger"
                       onClick={() => deleteTeam(teamObj.empId)}
                     >
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
@@ -297,13 +310,15 @@ const ProjectDetailedView = () => {
           ))}
         </tbody>
       </Table>
+      </div>
+     )}
       {concerns.length === 0 ? (
         <p className="text-center fw-bold text-danger fs-4 mt-4">
           No concerns to display
         </p>
       ) : (
         <div>
-          <p className="display-6 text-center fw-bold register-text mt-5">
+          <p className="display-6 text-center fw-bold mt-5">
             Project Concerns
           </p>
           <hr></hr>
@@ -312,6 +327,7 @@ const ProjectDetailedView = () => {
             style={{ width: "80%" }}
           >
             <thead>
+              <tr>
               <th>project name</th>
               <th>Description</th>
               <th>Raised By</th>
@@ -320,6 +336,7 @@ const ProjectDetailedView = () => {
               <th>Concern raised internally</th>
               <th>status</th>
               <th>mitigated on</th>
+              </tr>
             </thead>
             <tbody>
               {concerns.map((concernObj, index) => (
@@ -349,7 +366,11 @@ const ProjectDetailedView = () => {
         )
       }
     </div>
-  );
-};
+   }
+    </div>
+);
+}
+
+
 
 export default ProjectDetailedView;
